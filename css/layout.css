@@ -9,7 +9,7 @@
    a. General Styles
    b. Header Styles
    c. About Section
-   d. Education Section
+   d. Resume Section
    e. Portfolio Section
    f. Call To Action Section
    g. Testimonials Section
@@ -52,7 +52,7 @@ header .banner {
    vertical-align: middle;
    margin: 0 auto;
    width: 85%;
-   padding-bottom: 30px;s
+   padding-bottom: 30px;
    text-align: center;
 }
 
@@ -207,8 +207,8 @@ ul#nav li.current a { color: #F06000; }
 }
 #about .profile-pic {
    position: relative;
-   width: 200px;
-   height: 200px;
+   width: 120px;
+   height: 120px;
    border-radius: 100%;
 }
 #about .contact-details { width: 41.66667%; }
@@ -232,103 +232,53 @@ ul#nav li.current a { color: #F06000; }
 
 
 /* ------------------------------------------------------------------ */
-/* d. Education Section
+/* d. Resume Section
 /* ------------------------------------------------------------------ */
 
-#education {
+#resume {
    background: #fff;
    padding-top: 90px;
-   padding-bottom: 0px;
+   padding-bottom: 72px;
    overflow: hidden;
 }
 
-#education a, #education a:visited  { color: #11ABB0; }
-#education a:hover, #education a:focus { color: #313131; }
+#resume a, #resume a:visited  { color: #11ABB0; }
+#resume a:hover, #resume a:focus { color: #313131; }
 
-#education h1 {
+#resume h1 {
    font: 18px/24px 'opensans-bold', sans-serif;
    text-transform: uppercase;
    letter-spacing: 1px;
 }
-#education h1 span {
+#resume h1 span {
    border-bottom: 3px solid #11ABB0;
    padding-bottom: 6px;
 }
-#education h3 {
+#resume h3 {
    font: 25px/30px 'opensans-bold', sans-serif;
 }
 
-#education .header-col { padding-top: 9px; }
-#education .main-col { padding-right: 10%; }
+#resume .header-col { padding-top: 9px; }
+#resume .main-col { padding-right: 10%; }
 
 .education, .work {
    margin-bottom: 48px;
    padding-bottom: 24px;
    border-bottom: 1px solid #E8E8E8;
 }
-#education .info {
+#resume .info {
    font: 16px/24px 'librebaskerville-italic', serif;
    color: #6E7881;
    margin-bottom: 18px;
    margin-top: 9px;
 }
-#education .info span {
+#resume .info span {
    margin-right: 5px;
    margin-left: 5px;
 }
-#education .date {
+#resume .date {
    font: 15px/24px 'opensans-regular', sans-serif;
    margin-top: 6px;
-}
-
-/* ------------------------------------------------------------------ */
-/* d. Experience Section
-/* ------------------------------------------------------------------ */
-
-#experience {
-    background: #fff;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    overflow: hidden;
-}
-
-#experience a, #experience a:visited  { color: #11ABB0; }
-#experience a:hover, #experience a:focus { color: #313131; }
-
-#experience h1 {
-    font: 18px/24px 'opensans-bold', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-#experience h1 span {
-    border-bottom: 3px solid #11ABB0;
-    padding-bottom: 6px;
-}
-#experience h3 {
-    font: 25px/30px 'opensans-bold', sans-serif;
-}
-
-#experience .header-col { padding-top: 9px; }
-#experience .main-col { padding-right: 10%; }
-
-.education, .work {
-    margin-bottom: 48px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid #E8E8E8;
-}
-#experience .info {
-    font: 16px/24px 'librebaskerville-italic', serif;
-    color: #6E7881;
-    margin-bottom: 18px;
-    margin-top: 9px;
-}
-#experience .info span {
-    margin-right: 5px;
-    margin-left: 5px;
-}
-#experience .date {
-    font: 15px/24px 'opensans-regular', sans-serif;
-    margin-top: 6px;
 }
 
 /*----------------------------------------------*/
@@ -374,93 +324,87 @@ ul#nav li.current a { color: #F06000; }
    line-height: 42px;
    border-radius: 3px 0 0 3px;
 }
-/*
-.git {
-  	-moz-animation: git 2s ease;
-  	-webkit-animation: git 2s ease;
+
+.skill1 {
+  	width: 90%;
+  	-moz-animation: skill1 2s ease;
+  	-webkit-animation: skill1 2s ease;
 }
-.illustrator {
-  	-moz-animation: illustrator 2s ease;
-  	-webkit-animation: illustrator 2s ease;
+.skill2 {
+  	width: 80%;
+  	-moz-animation: skill2 2s ease;
+  	-webkit-animation: skill2 2s ease;
 }
-.reactjs {
-  	-moz-animation: reactjs 2s ease;
-  	-webkit-animation: reactjs 2s ease;
+.skill3 {
+  	width: 85%;
+  	-moz-animation: skill3 2s ease;
+  	-webkit-animation: skill3 2s ease;
 }
-.css {
-  	-moz-animation: css 2s ease;
-  	-webkit-animation: css 2s ease;
+.skill4 {
+  	width: 75%;
+  	-moz-animation: skill4 2s ease;
+  	-webkit-animation: skill4 2s ease;
 }
-.html5 {
-  	-moz-animation: html5 2s ease;
-  	-webkit-animation: html5 2s ease;
+.skill5 {
+  	width: 85%;
+  	-moz-animation: skill5 2s ease;
+  	-webkit-animation: skill5 2s ease;
 }
-.vuejs {
-  	-moz-animation: vuejs 2s ease;
-  	-webkit-animation: vuejs 2s ease;
-}
-.mongodb {
-  	-moz-animation: mongodb 2s ease;
-  	-webkit-animation: mongodb 2s ease;
+.skill6 {
+  	width: 80%;
+  	-moz-animation: skill6 2s ease;
+  	-webkit-animation: skill6 2s ease;
 }
 
-@-moz-keyframes git {
-  0%   { width: 0px;  }
-  100% { width: 60%;  }
-}
-@-moz-keyframes illustrator {
-  0%   { width: 0px;  }
-  100% { width: 55%;  }
-}
-@-moz-keyframes reactjs {
-  0%   { width: 0px;  }
-  100% { width: 50%;  }
-}
-@-moz-keyframes css {
+@-moz-keyframes skill1 {
   0%   { width: 0px;  }
   100% { width: 90%;  }
 }
-@-moz-keyframes html5 {
+@-moz-keyframes skill2 {
   0%   { width: 0px;  }
   100% { width: 80%;  }
 }
-@-moz-keyframes vuejs {
+@-moz-keyframes skill3 {
   0%   { width: 0px;  }
-  100% { width: 50%;  }
+  100% { width: 85%;  }
 }
-@-moz-keyframes mongodb {
+@-moz-keyframes skill4 {
+  0%   { width: 0px;  }
+  100% { width: 75%;  }
+}
+@-moz-keyframes skill5 {
+  0%   { width: 0px;  }
+  100% { width: 85%;  }
+}
+@-moz-keyframes skill6 {
   0%   { width: 0px;  }
   100% { width: 80%;  }
 }
 
-@-webkit-keyframes photoshop {
-  0%   { width: 0px;  }
-  100% { width: 60%;  }
-}
-@-webkit-keyframes illustrator {
-  0%   { width: 0px;  }
-  100% { width: 55%;  }
-}
-@-webkit-keyframes reactjs {
-  0%   { width: 0px;  }
-  100% { width: 50%;  }
-}
-@-webkit-keyframes css {
+@-webkit-keyframes skill1 {
   0%   { width: 0px;  }
   100% { width: 90%;  }
 }
-@-webkit-keyframes html5 {
+@-webkit-keyframes skill2 {
   0%   { width: 0px;  }
   100% { width: 80%;  }
 }
-@-webkit-keyframes vuejs {
+@-webkit-keyframes skill3 {
   0%   { width: 0px;  }
-  100% { width: 50%;  }
+  100% { width: 85%;  }
 }
-@-webkit-keyframes mongodb {
+@-webkit-keyframes skill4 {
+  0%   { width: 0px;  }
+  100% { width: 75%;  }
+}
+@-webkit-keyframes skill5 {
+  0%   { width: 0px;  }
+  100% { width: 85%;  }
+}
+@-webkit-keyframes skill6 {
   0%   { width: 0px;  }
   100% { width: 80%;  }
-}  */
+}
 
 /* ------------------------------------------------------------------ */
 /* e. Portfolio Section
@@ -686,7 +630,7 @@ call-to-action .button {
    color: #0D0D0D;
 }
 #call-to-action p span {
-	font-family: 'opensans-semibold', sans-serif;
+	font-family: 'opensans-semibold', sans-serif; 
 	color: #D8D8D8;
 }
 
@@ -710,7 +654,7 @@ call-to-action .button {
    padding-bottom: 66px;
 }
 #testimonials h1 {
-   font: 18px/24px 'opensans-bold', sans-serif;
+   font: 18px/24px 'opensans-bold', sans-serif;   
    text-transform: uppercase;
    letter-spacing: 3px;
    color: #fff;
@@ -718,8 +662,6 @@ call-to-action .button {
 #testimonials h1 span { display: none; }
 #testimonials .header-col { padding-top: 9px; }
 #testimonials .header-col h1:before {
-   font-family: 'FontAwesome';
-   content: "\f10d";
 	padding-right: 10px;
 	font-size: 72px;
    line-height: 72px;
@@ -1059,3 +1001,4 @@ footer .social-links li:first-child { margin-left: 0; }
  	border-radius: 100%;
 }
 #go-top a:hover { background-color: #0F9095; }
+
