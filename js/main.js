@@ -1,577 +1,314 @@
 /**
- * JAYDEEP MOHITE — CLOUD COCKPIT & INTERACTIVE DEVOPS TERMINAL CONTROLLER
- * Zero-dependency, ultra-fast ES6+ architecture
+ * JAYDEEP MOHITE — Executive App Workspace Portfolio Controller
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
-  initCursorSpotlight();
-  initKeyboardShortcuts();
-  initInteractiveTerminal();
-  initTopologyVisualizer();
-  init3DTiltCards();
-  initFlightDeck();
-  initCommandPalette();
-  initClipboard();
-  initContactForm();
+  initTabNavigation();
+  initCompanySelector();
+  initProjectFilters();
+  initCopyButtons();
   initLondonClock();
+  initContactForm();
 });
 
-/* ===================================================================
-   THEME TOGGLER (Dark / Light Mode)
-   =================================================================== */
+/* -------------------------------------------------------------------
+   1. Theme Switcher
+   ------------------------------------------------------------------- */
 function initTheme() {
-  const themeToggleBtn = document.getElementById('theme-toggle-dock');
-  const storedTheme = localStorage.getItem('jm-cockpit-theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', storedTheme);
-  updateThemeIcon(storedTheme);
+  const btn = document.getElementById('theme-btn');
+  const icon = document.getElementById('theme-icon');
+  
+  const saved = localStorage.getItem('theme') || 
+    (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
 
-  if (themeToggleBtn) {
-    themeToggleBtn.addEventListener('click', () => {
-      const activeTheme = document.documentElement.getAttribute('data-theme');
-      const nextTheme = activeTheme === 'light' ? 'dark' : 'light';
-      document.documentElement.setAttribute('data-theme', nextTheme);
-      localStorage.setItem('jm-cockpit-theme', nextTheme);
-      updateThemeIcon(nextTheme);
-      showToast(`Switched to ${nextTheme} mode`);
-    });
-  }
-}
+  setTheme(saved);
 
-function updateThemeIcon(theme) {
-  const icon = document.getElementById('theme-icon-dock');
-  if (!icon) return;
-  icon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
-}
-
-/* ===================================================================
-   CURSOR SPOTLIGHT AMBIENT GLOW
-   =================================================================== */
-function initCursorSpotlight() {
-  const spotlight = document.getElementById('cursor-spotlight');
-  if (!spotlight) return;
-
-  window.addEventListener('mousemove', (e) => {
-    spotlight.style.left = `${e.clientX}px`;
-    spotlight.style.top = `${e.clientY}px`;
-  });
-}
-
-/* ===================================================================
-   KEYBOARD SHORTCUTS ENGINE
-   =================================================================== */
-function initKeyboardShortcuts() {
-  document.addEventListener('keydown', (e) => {
-    // Ignore when typing inside input or textarea
-    if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
-
-    switch (e.key) {
-      case '1':
-        scrollToEl('home');
-        break;
-      case '2':
-        scrollToEl('experience');
-        break;
-      case '3':
-        scrollToEl('architecture');
-        break;
-      case '4':
-        scrollToEl('skills');
-        break;
-      case '5':
-        scrollToEl('contact');
-        break;
-      case 'r':
-      case 'R':
-        window.open('JaydeepMohiteResume.pdf', '_blank');
-        showToast('Opening official resume PDF...');
-        break;
-      case 't':
-      case 'T':
-        const cliInput = document.getElementById('cli-input');
-        if (cliInput) {
-          cliInput.focus();
-          showToast('Interactive Terminal focused');
-        }
-        break;
-    }
-  });
-}
-
-function scrollToEl(id) {
-  const target = document.getElementById(id);
-  if (target) {
-    target.scrollIntoView({ behavior: 'smooth' });
-  }
-}
-
-/* ===================================================================
-   INTERACTIVE DEVOPS TERMINAL SANDBOX ENGINE (jaydeep@london-eks:~#)
-   =================================================================== */
-function initInteractiveTerminal() {
-  const terminalBody = document.getElementById('terminal-body');
-  const cliForm = document.getElementById('cli-form');
-  const cliInput = document.getElementById('cli-input');
-  const chipButtons = document.querySelectorAll('.cli-chip[data-cmd]');
-
-  if (!terminalBody || !cliInput) return;
-
-  let cmdHistory = [];
-  let historyIdx = -1;
-
-  const terminalCommands = {
-    help: () => `
-Available Commands:
-  ▹ status       — Live AWS EKS cluster telemetry & health status
-  ▹ arch         — Multi-account cloud topology & low-latency architecture
-  ▹ skills       — Core competencies (AWS, Kubernetes, Terraform, Java, Spring)
-  ▹ benchmarks   — Latency reductions, 99.999% SLA, and zero-downtime cutover stats
-  ▹ experience   — Career timeline across J.P. Morgan and Deutsche Bank
-  ▹ resume       — Open official compiled PDF resume
-  ▹ contact      — Direct email, phone, and LinkedIn coordinates
-  ▹ clear        — Clear terminal display
-`,
-    status: () => `
-[jpm-eks-prod-cluster] Status: ACTIVE (Europe-London)
-├── Multi-AZ NodeGroups: 3 Availability Zones (eu-west-2a, 2b, 2c)
-├── Pods Health: 100% HEALTHY (HPA active: 40-180 replicas)
-├── Compute Strategy: Managed NodeGroups + Karpenter Autoscaling
-├── IAM Security: IRSA Least-Privilege Guardrails ENFORCED
-└── Telemetry: Prometheus / Grafana / CloudWatch Synthetics: OK
-`,
-    arch: () => `
-[Mission-Critical Architecture Topology]
-  [Edge / PWA] ──> [Cloudflare CDN] ──> [AWS ALB Ingress]
-                                              │
-                      ┌───────────────────────┴───────────────────────┐
-                      ▼                                               ▼
-         [AWS EKS Pods (Java 17)]                         [RiskOne Low-Latency]
-                      │                                               │
-           [Chronicle Queue / FIX] ──────────────────────────> [Redis In-Memory]
-                      │                                               │
-             [AWS Aurora PostgreSQL] <── [Terraform IaC] <── [OCI Vault Secrets]
-`,
-    skills: () => `
-[Core Technical Arsenal]
-├── Cloud & IaC:      AWS (EKS, Aurora, S3, IAM, VPC), Terraform, Docker, Helm
-├── SRE & CI/CD:      Jenkins Pipeline-as-Code, ArgoCD, SonarQube, Prometheus
-├── Languages:        Java (8/11/17), Python, Bash, TypeScript, SQL
-├── Frameworks:       Spring Boot (Security, Cloud, Data), Chronicle, WebSockets
-└── Messaging & DB:   Redis Cache, FIX Protocol, IBM MQ, PostgreSQL, Oracle
-`,
-    benchmarks: () => `
-[Production Impact & Verified Benchmarks]
-  ✓ Latency Drop:        >70% latency reduction on RiskOne via in-memory cache
-  ✓ EKS Modernization:   0 downtime cloud cutover across enterprise accounts
-  ✓ Platform SLA:        99.999% high availability on global trading engines
-  ✓ Test Coverage:       65% regression automation via BDD Cucumber/Selenium
-`,
-    experience: () => `
-[Career Dossier Progression]
-  1. Vice President — Lead DevOps Engineer | JPM Personal Investing (2024 - Present, London)
-  2. Associate Vice President | JPMorgan Services India (2021 - 2024, Bengaluru)
-  3. Associate / Senior Analyst / Analyst | Deutsche Bank Group (2017 - 2021, Pune)
-  4. Summer Intern | Mastercard Technology (2016, Pune)
-`,
-    resume: () => {
-      window.open('JaydeepMohiteResume.pdf', '_blank');
-      return `✓ Opening official compiled PDF resume in new tab...`;
-    },
-    contact: () => `
-[Direct Contact Channels]
-  ▹ Email:     jaydeepmohite@hotmail.com
-  ▹ Phone:     +44 7459 132498
-  ▹ Location:  London, United Kingdom
-  ▹ LinkedIn:  https://www.linkedin.com/in/jaydeepmohite
-  ▹ GitHub:    https://github.com/jaydeepmohite
-`,
-    clear: () => {
-      terminalBody.innerHTML = '';
-      return '';
-    },
-    sudo: () => `Permission granted: You are authorized as Guest Superuser on Jaydeep's portfolio engine!`,
-    uname: () => `Darwin london-eks-node 23.5.0 Darwin Kernel Version x86_64/arm64`,
-    top: () => `Tasks: 42 running, 0 failed | Load avg: 0.12, 0.08, 0.05 | Memory: 32GB (18% used)`
-  };
-
-  function appendToTerminal(text, isCommand = false) {
-    const line = document.createElement('div');
-    line.className = 'cli-output-line';
-    if (isCommand) {
-      line.innerHTML = `<span style="color:var(--neon-emerald); font-weight:700;">jaydeep@london-eks:~#</span> <span style="color:#fff;">${text}</span>`;
-    } else {
-      line.textContent = text;
-    }
-    terminalBody.appendChild(line);
-    terminalBody.scrollTop = terminalBody.scrollHeight;
-  }
-
-  function executeCommand(input) {
-    const rawCmd = input.trim();
-    if (!rawCmd) return;
-
-    cmdHistory.push(rawCmd);
-    historyIdx = cmdHistory.length;
-
-    appendToTerminal(rawCmd, true);
-
-    const cmdKey = rawCmd.toLowerCase().split(' ')[0];
-    if (terminalCommands[cmdKey]) {
-      const output = terminalCommands[cmdKey]();
-      if (output) {
-        appendToTerminal(output.trim());
-      }
-    } else {
-      appendToTerminal(`bash: command not found: ${rawCmd}. Type "help" for a list of commands.`);
-    }
-  }
-
-  if (cliForm) {
-    cliForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const val = cliInput.value;
-      cliInput.value = '';
-      executeCommand(val);
-    });
-  }
-
-  // Chip quick action buttons
-  chipButtons.forEach(chip => {
-    chip.addEventListener('click', () => {
-      const cmd = chip.getAttribute('data-cmd');
-      if (cmd) {
-        executeCommand(cmd);
-      }
-    });
-  });
-
-  // Initial welcome greeting
-  appendToTerminal(`Jaydeep Mohite Cloud Cockpit Terminal [Version 2.6.0]
-Type "status", "arch", "skills", or "help" to inspect systems.`);
-}
-
-/* ===================================================================
-   INTERACTIVE ARCHITECTURE TOPOLOGY VISUALIZER
-   =================================================================== */
-function initTopologyVisualizer() {
-  const nodes = document.querySelectorAll('.topology-node');
-  const panelHeading = document.getElementById('topology-detail-heading');
-  const panelDesc = document.getElementById('topology-detail-desc');
-  const panelTech = document.getElementById('topology-detail-tech');
-
-  const topologyData = {
-    edge: {
-      title: '1. Edge Ingress & Progressive Web App Layer',
-      desc: 'High-availability ingress routing with Cloudflare CDN, SSL/TLS termination, Caddy reverse proxy, and mobile PWA service worker caching.',
-      tech: 'Cloudflare • Caddy • PWA Service Workers • TLS 1.3'
-    },
-    compute: {
-      title: '2. Multi-Account AWS EKS Compute Cluster',
-      desc: 'Container runtime across multi-AZ worker nodes with Kubernetes Horizontal Pod Autoscaling (HPA), Karpenter autoscaling, and IRSA least-privilege guardrails.',
-      tech: 'AWS EKS • Kubernetes • Docker • Helm • Karpenter'
-    },
-    risk: {
-      title: '3. Low-Latency Transaction & Risk Engine',
-      desc: 'High-throughput post-trade risk evaluation processing real-time market feeds via FIX Protocol handlers, Chronicle queues, and microservices.',
-      tech: 'Java 17 • Spring Boot • Chronicle Queue • FIX Protocol'
-    },
-    cache: {
-      title: '4. In-Memory Distributed Cache Layer',
-      desc: 'Sub-millisecond static and reference data caching with real-time replication, delivering over 70% latency drops on core transaction workflows.',
-      tech: 'Redis In-Memory • WebSockets • IBM MQ • Event-Driven Push'
-    },
-    storage: {
-      title: '5. Multi-Region Data & Secrets Vault',
-      desc: 'Strict transactional integrity with AWS Aurora PostgreSQL, 256-bit AES encryption at rest, and automated OCI Vault / AWS Secrets Manager resolution.',
-      tech: 'AWS Aurora • PostgreSQL • OCI Vault • 256-bit AES Encryption'
-    }
-  };
-
-  nodes.forEach(node => {
-    node.addEventListener('mouseenter', () => {
-      const key = node.getAttribute('data-node');
-      if (topologyData[key]) {
-        nodes.forEach(n => n.classList.remove('active'));
-        node.classList.add('active');
-        if (panelHeading) panelHeading.textContent = topologyData[key].title;
-        if (panelDesc) panelDesc.textContent = topologyData[key].desc;
-        if (panelTech) panelTech.textContent = topologyData[key].tech;
-      }
-    });
-
-    node.addEventListener('click', () => {
-      const key = node.getAttribute('data-node');
-      if (topologyData[key]) {
-        nodes.forEach(n => n.classList.remove('active'));
-        node.classList.add('active');
-        if (panelHeading) panelHeading.textContent = topologyData[key].title;
-        if (panelDesc) panelDesc.textContent = topologyData[key].desc;
-        if (panelTech) panelTech.textContent = topologyData[key].tech;
-      }
-    });
-  });
-}
-
-/* ===================================================================
-   3D TILT GLARE PHYSICS ON ARCHITECTURE CARDS
-   =================================================================== */
-function init3DTiltCards() {
-  const cards = document.querySelectorAll('.arch-card-3d');
-
-  cards.forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      
-      const rotateX = ((y - centerY) / centerY) * -7;
-      const rotateY = ((x - centerX) / centerX) * 7;
-
-      card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px)`;
-    });
-
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
-    });
-  });
-}
-
-/* ===================================================================
-   MISSION EXPERIENCE FLIGHT DECK (Interactive Company Switcher)
-   =================================================================== */
-function initFlightDeck() {
-  const btns = document.querySelectorAll('.flight-btn');
-  const panels = document.querySelectorAll('.mission-panel');
-
-  btns.forEach(btn => {
+  if (btn) {
     btn.addEventListener('click', () => {
-      const targetId = btn.getAttribute('data-panel');
+      const current = document.documentElement.getAttribute('data-theme');
+      const target = current === 'light' ? 'dark' : 'light';
+      setTheme(target);
+      showToast(`Switched to ${target} mode`);
+    });
+  }
 
-      btns.forEach(b => b.classList.remove('active'));
-      panels.forEach(p => p.classList.remove('active'));
+  function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    if (icon) {
+      icon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+    }
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    if (metaTheme) {
+      metaTheme.setAttribute('content', theme === 'light' ? '#f8fafc' : '#09090b');
+    }
+  }
+}
 
+/* -------------------------------------------------------------------
+   2. Tabbed Workspace Navigation & Hash Routing
+   ------------------------------------------------------------------- */
+function initTabNavigation() {
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabPanes = document.querySelectorAll('.tab-pane');
+
+  if (!tabBtns.length || !tabPanes.length) return;
+
+  const switchTab = (tabId) => {
+    const targetPane = document.getElementById(`tab-${tabId}`);
+    if (!targetPane) return;
+
+    tabBtns.forEach(btn => {
+      const isTarget = btn.getAttribute('data-tab') === tabId;
+      btn.classList.toggle('active', isTarget);
+      btn.setAttribute('aria-selected', isTarget ? 'true' : 'false');
+    });
+
+    tabPanes.forEach(pane => {
+      pane.classList.remove('active');
+    });
+
+    targetPane.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.getAttribute('data-tab');
+      switchTab(tabId);
+      window.location.hash = tabId;
+    });
+  });
+
+  // Handle URL Hash navigation (e.g. #work, #experience, #skills, #contact)
+  const handleHashChange = () => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash && document.getElementById(`tab-${hash}`)) {
+      switchTab(hash);
+    } else {
+      switchTab('overview');
+    }
+  };
+
+  window.addEventListener('hashchange', handleHashChange);
+  handleHashChange(); // Initial load
+}
+
+/* -------------------------------------------------------------------
+   3. Interactive Company Selector (Experience Tab)
+   ------------------------------------------------------------------- */
+const companyExperienceData = {
+  jpmc_uk: {
+    role: "Vice President — Lead DevOps Engineer",
+    period: "June 2024 — Present",
+    firm: "JPM Personal Investing Limited • J.P. Morgan Chase & Co.",
+    location: "London, UK 🇬🇧",
+    bullets: [
+      "Lead DevOps and cloud infrastructure initiatives for <strong>JPM Personal Investing</strong>, establishing scalable infrastructure patterns, strict security posture, and high developer velocity across engineering squads.",
+      "Spearheaded the flagship <strong>Atlas Migration</strong> program, migrating business-critical workloads and distributed data stores from standalone legacy AWS accounts to enterprise-standard J.P. Morgan Chase managed AWS accounts with <strong>zero downtime</strong>.",
+      "Architected and executed end-to-end <strong>compute migration to AWS EKS</strong> (Elastic Kubernetes Service), standardizing container runtime environments, Horizontal Pod Autoscaling (HPA), and least-privilege IAM Roles for Service Accounts (IRSA).",
+      "Orchestrated high-volume, secure <strong>data migrations</strong> across cloud databases (RDS/Aurora) and object storage with strict transactional integrity and zero data loss.",
+      "Engineered reusable, modular Infrastructure as Code (IaC) using <strong>Terraform</strong>, automating multi-account VPC networking, security guardrails, and compliance-as-code policies.",
+      "Standardized enterprise <strong>CI/CD pipelines</strong> using Jenkins, Docker, and Helm, incorporating automated security scanning, quality gates, and automated canary/blue-green deployments."
+    ],
+    tags: ["AWS EKS", "Terraform", "Docker", "Helm", "RDS Aurora", "Jenkins", "Zero-Downtime"]
+  },
+  jpmc_in: {
+    role: "Associate Vice President — Software Engineer",
+    period: "June 2021 — June 2024",
+    firm: "JPMorgan Services India Pvt. Ltd. • J.P. Morgan Chase & Co.",
+    location: "Bengaluru, India 🇮🇳",
+    bullets: [
+      "Served as Lead Engineer on <strong>RiskOne</strong>, J.P. Morgan's strategic real-time post-trade risk monitoring, alerting, and automated kill-switch platform handling millions of daily trading events.",
+      "Architected the <strong>in-memory caching migration</strong>, transitioning static reference data from legacy relational databases to a distributed low-latency in-memory cache with real-time updates, <strong>reducing latency by over 70%</strong>.",
+      "Drove the <strong>AWS cloud migration</strong> for legacy reporting monoliths, re-architecting applications into containerized cloud-native microservices on AWS.",
+      "Designed generic, reusable Jenkins-based CI/CD automation pipelines for automated test execution, packaging, and on-demand deployment across staging and production environments.",
+      "Collaborated closely with risk managers, trading desks, and compliance officers in a fast-paced SAFe Agile delivery environment."
+    ],
+    tags: ["Java 17", "Spring Boot", "Chronicle Queues", "FIX Protocol", "Redis Cache", "AWS", "Angular"]
+  },
+  db_in: {
+    role: "Associate • Senior Analyst • Analyst",
+    period: "July 2017 — June 2021",
+    firm: "DBOI Global Services Pvt. Ltd. • Deutsche Bank Group",
+    location: "Pune, India 🇮🇳",
+    bullets: [
+      "Core developer for Deutsche Bank's strategic global <strong>P&L accounting platform (dbPalace)</strong>, ensuring high availability, exception handling, and accurate front-to-back financial reporting.",
+      "Redesigned trade sign-off workflows from a polling architecture to an event-driven push model using <strong>WebSockets</strong> and <strong>IBM MQ</strong>, significantly reducing message delivery latency.",
+      "Engineered an in-house microservices-based reporting framework (<strong>IHAP</strong>) with React UI to decommission IBM Cognos, saving substantial annual licensing costs.",
+      "Established a BDD test automation framework with Cucumber, Selenium, and Serenity, increasing regression code coverage to <strong>65%</strong> and reducing manual QA turnaround time.",
+      "Delivered <strong>Digital Planner</strong>, a real-time web application enabling collaborative SAFe PI Planning for 200+ distributed engineers globally (Node.js, Angular, WebSockets, Redis)."
+    ],
+    tags: ["Java", "Spring Boot", "WebSockets", "IBM MQ", "OpenShift Cloud", "React", "Cucumber BDD"]
+  },
+  early_career: {
+    role: "Early Career & Internships",
+    period: "May 2016 — April 2017",
+    firm: "Mastercard Technology & Choose To Thinq",
+    location: "Pune, India 🇮🇳",
+    bullets: [
+      "<strong>Mastercard Technology (Summer Intern):</strong> Engineered a full-stack web-based resource forecasting and management platform that reduced manual tracking overhead by 80% (Spring Boot, AngularJS, MongoDB).",
+      "<strong>Choose To Thinq (Project Intern):</strong> Developed an intelligent conversational chatbot for personalized book recommendations using NLP heuristics on Facebook Messenger."
+    ],
+    tags: ["Spring Boot", "AngularJS", "MongoDB", "Python NLP", "Chatbots"]
+  }
+};
+
+function initCompanySelector() {
+  const companyBtns = document.querySelectorAll('.company-tab-btn');
+  const roleTitle = document.getElementById('co-role-title');
+  const rolePeriod = document.getElementById('co-role-period');
+  const roleFirm = document.getElementById('co-role-firm');
+  const roleBullets = document.getElementById('co-role-bullets');
+  const roleTags = document.getElementById('co-role-tags');
+
+  if (!companyBtns.length || !roleTitle) return;
+
+  companyBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      companyBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      const target = document.getElementById(targetId);
-      if (target) {
-        target.classList.add('active');
+
+      const coKey = btn.getAttribute('data-company');
+      const data = companyExperienceData[coKey];
+      if (!data) return;
+
+      if (roleTitle) roleTitle.textContent = data.role;
+      if (rolePeriod) rolePeriod.textContent = data.period;
+      if (roleFirm) roleFirm.innerHTML = `<span>${data.firm}</span> <span style="font-size:0.78rem; font-family:var(--font-mono); color:var(--text-muted);"><i class="fas fa-location-dot"></i> ${data.location}</span>`;
+      
+      if (roleBullets) {
+        roleBullets.innerHTML = data.bullets.map(b => `<div class="role-bullet">${b}</div>`).join('');
+      }
+
+      if (roleTags) {
+        roleTags.innerHTML = data.tags.map(t => `<span class="tag-pill highlight">${t}</span>`).join('');
       }
     });
   });
 }
 
-/* ===================================================================
-   COMMAND PALETTE MODAL (⌘K Search)
-   =================================================================== */
-function initCommandPalette() {
-  const triggerBtn = document.getElementById('cmd-palette-trigger-dock');
-  const modal = document.getElementById('cmd-modal');
-  const input = document.getElementById('cmd-search-input');
-  const listContainer = document.getElementById('cmd-results-container');
+/* -------------------------------------------------------------------
+   4. Project Filter Tabs
+   ------------------------------------------------------------------- */
+function initProjectFilters() {
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const projectCards = document.querySelectorAll('.project-card');
 
-  if (!modal || !input) return;
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
 
-  const commands = [
-    { title: 'Official Resume (PDF)', desc: 'View official compiled PDF resume', icon: 'fa-file-pdf', action: () => window.open('JaydeepMohiteResume.pdf', '_blank') },
-    { title: 'Interactive DevOps Terminal', desc: 'Jump to interactive CLI sandbox in Hero', icon: 'fa-terminal', action: () => { scrollToEl('home'); document.getElementById('cli-input')?.focus(); } },
-    { title: 'Cloud Architecture Topology', desc: 'Interactive visual node schematic', icon: 'fa-network-wired', action: () => scrollToEl('architecture') },
-    { title: 'Executive Career Flight Deck', desc: 'J.P. Morgan, Deutsche Bank, Mastercard', icon: 'fa-briefcase', action: () => scrollToEl('experience') },
-    { title: 'NetWealth Production Platform', desc: 'Live multi-broker investment engine', icon: 'fa-arrow-up-right-from-square', action: () => window.open('https://netwealth.tech', '_blank') },
-    { title: 'Technical Radar & Matrix', desc: 'AWS EKS, Terraform, Spring Boot, Java', icon: 'fa-microchip', action: () => scrollToEl('skills') },
-    { title: 'Verified Peer Endorsements', desc: 'Goldman Sachs, Harness, Microsoft', icon: 'fa-comment-dots', action: () => scrollToEl('credentials') },
-    { title: 'Copy Email Address', desc: 'jaydeepmohite@hotmail.com', icon: 'fa-copy', action: () => copyDirect('jaydeepmohite@hotmail.com') },
-    { title: 'Copy Mobile Number', desc: '+44 7459 132498', icon: 'fa-phone', action: () => copyDirect('+447459132498') },
-    { title: 'Open LinkedIn Profile', desc: 'linkedin.com/in/jaydeepmohite', icon: 'fa-linkedin', action: () => window.open('https://www.linkedin.com/in/jaydeepmohite', '_blank') }
-  ];
+      const filter = btn.getAttribute('data-filter');
 
-  function openModal() {
-    modal.classList.add('open');
-    input.value = '';
-    renderList(commands);
-    setTimeout(() => input.focus(), 60);
-  }
-
-  function closeModal() {
-    modal.classList.remove('open');
-  }
-
-  function copyDirect(text) {
-    closeModal();
-    navigator.clipboard.writeText(text).then(() => {
-      showToast(`Copied "${text}" to clipboard!`);
-    });
-  }
-
-  function renderList(items) {
-    if (!listContainer) return;
-    listContainer.innerHTML = '';
-
-    if (items.length === 0) {
-      listContainer.innerHTML = '<div style="padding:1rem; text-align:center; color:var(--text-muted); font-size:0.9rem;">No matching commands found.</div>';
-      return;
-    }
-
-    items.forEach((item, idx) => {
-      const el = document.createElement('div');
-      el.className = `cmd-entry ${idx === 0 ? 'selected' : ''}`;
-      el.innerHTML = `
-        <div class="cmd-entry-left">
-          <i class="fas ${item.icon}"></i>
-          <div>
-            <div style="font-weight:600; color:var(--text-primary); font-size:0.92rem;">${item.title}</div>
-            <div style="font-size:0.78rem; color:var(--text-muted);">${item.desc}</div>
-          </div>
-        </div>
-        <span class="cmd-shortcut-tag">Jump</span>
-      `;
-      el.addEventListener('click', () => {
-        closeModal();
-        item.action();
+      projectCards.forEach(card => {
+        const category = card.getAttribute('data-category') || '';
+        if (filter === 'all' || category.includes(filter)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
       });
-      listContainer.appendChild(el);
     });
-  }
-
-  if (triggerBtn) {
-    triggerBtn.addEventListener('click', openModal);
-  }
-
-  document.addEventListener('keydown', (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-      e.preventDefault();
-      if (modal.classList.contains('open')) closeModal();
-      else openModal();
-    } else if (e.key === 'Escape' && modal.classList.contains('open')) {
-      closeModal();
-    }
-  });
-
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) closeModal();
-  });
-
-  input.addEventListener('input', () => {
-    const q = input.value.toLowerCase().trim();
-    if (!q) {
-      renderList(commands);
-      return;
-    }
-    const filtered = commands.filter(c => c.title.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q));
-    renderList(filtered);
   });
 }
 
-/* ===================================================================
-   CLIPBOARD & TOAST
-   =================================================================== */
-function initClipboard() {
-  const copyBtns = document.querySelectorAll('.copy-icon-btn');
-
-  copyBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
+/* -------------------------------------------------------------------
+   5. Clipboard Copy Helper
+   ------------------------------------------------------------------- */
+function initCopyButtons() {
+  document.querySelectorAll('[data-copy]').forEach(btn => {
+    btn.addEventListener('click', () => {
       const text = btn.getAttribute('data-copy');
       if (!text) return;
 
-      navigator.clipboard.writeText(text).then(() => {
-        showToast(`Copied "${text}" to clipboard!`);
-        btn.innerHTML = '<i class="fas fa-check" style="color:var(--neon-emerald);"></i>';
-        setTimeout(() => {
-          btn.innerHTML = '<i class="fas fa-copy"></i>';
-        }, 2000);
-      });
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast(`Copied "${text}" to clipboard`);
+        }).catch(() => fallbackCopy(text));
+      } else {
+        fallbackCopy(text);
+      }
     });
   });
+
+  function fallbackCopy(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    showToast(`Copied "${text}" to clipboard`);
+  }
 }
 
-function showToast(message) {
-  const toast = document.getElementById('cockpit-toast');
-  const toastMsg = document.getElementById('cockpit-toast-text');
-  if (!toast) return;
+/* -------------------------------------------------------------------
+   6. Live London Clock
+   ------------------------------------------------------------------- */
+function initLondonClock() {
+  const clockEl = document.getElementById('london-clock');
+  if (!clockEl) return;
 
-  if (toastMsg) toastMsg.textContent = message;
-  toast.classList.add('show');
+  const updateClock = () => {
+    const d = new Date();
+    clockEl.textContent = d.toLocaleTimeString('en-GB', {
+      timeZone: 'Europe/London',
+      hour12: false,
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+  };
 
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, 3200);
+  updateClock();
+  setInterval(updateClock, 1000);
 }
 
-/* ===================================================================
-   CONTACT FORM (Direct Mailto Client Launch)
-   =================================================================== */
+/* -------------------------------------------------------------------
+   7. Contact Form Handler
+   ------------------------------------------------------------------- */
 function initContactForm() {
-  const contactForm = document.getElementById('cockpit-contact-form');
-  const formStatus = document.getElementById('cockpit-form-status');
-  if (!contactForm) return;
+  const form = document.getElementById('contact-form');
+  if (!form) return;
 
-  contactForm.addEventListener('submit', (e) => {
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const nameInput = document.getElementById('input-name');
-    const emailInput = document.getElementById('input-email');
-    const subjectInput = document.getElementById('input-subject');
-    const messageInput = document.getElementById('input-message');
-
-    const name = nameInput ? nameInput.value.trim() : '';
-    const email = emailInput ? emailInput.value.trim() : '';
-    const rawSubject = subjectInput && subjectInput.value.trim() ? subjectInput.value.trim() : 'Cloud Platform Discussion';
-    const message = messageInput ? messageInput.value.trim() : '';
+    const name = document.getElementById('contact-name').value.trim();
+    const email = document.getElementById('contact-email').value.trim();
+    const subject = document.getElementById('contact-subject').value.trim() || 'Engineering Leadership Inquiry';
+    const message = document.getElementById('contact-message').value.trim();
 
     if (!name || !email || !message) {
-      if (formStatus) {
-        formStatus.className = 'form-status-box error';
-        formStatus.textContent = 'Please complete all required fields (Name, Email, Message).';
-        formStatus.style.display = 'block';
-      }
+      showToast('Please complete all required fields.');
       return;
     }
 
-    const emailSubject = `[Portfolio Contact] ${rawSubject} - from ${name}`;
-    const emailBody = `Hi Jaydeep,
+    const body = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+    const mailtoUrl = `mailto:jaydeepmohite@hotmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-${message}
-
----
-Sender: ${name} (${email})
-Sent via jaydeepmohite.github.io`;
-
-    const mailtoUrl = `mailto:jaydeepmohite@hotmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-
-    if (formStatus) {
-      formStatus.className = 'form-status-box success';
-      formStatus.innerHTML = `✓ Launching email app to message <strong>jaydeepmohite@hotmail.com</strong>...<br><small style="color:var(--text-muted); display:inline-block; margin-top:0.45rem;">If your mail app did not open, <a href="${mailtoUrl}" style="color:var(--neon-cyan); text-decoration:underline; font-weight:600;">click here to send</a> or write to <a href="mailto:jaydeepmohite@hotmail.com" style="color:var(--neon-cyan); text-decoration:underline;">jaydeepmohite@hotmail.com</a>.</small>`;
-      formStatus.style.display = 'block';
-    }
-
-    showToast('Opening email client...');
-
-    setTimeout(() => {
-      window.location.href = mailtoUrl;
-    }, 200);
+    window.location.href = mailtoUrl;
+    showToast('Opening default email client...');
+    form.reset();
   });
 }
 
-/* ===================================================================
-   LONDON LIVE TIME WIDGET
-   =================================================================== */
-function initLondonClock() {
-  const clockEl = document.getElementById('london-live-clock');
-  if (!clockEl) return;
+/* -------------------------------------------------------------------
+   8. Toast Notification Helper
+   ------------------------------------------------------------------- */
+let toastTimer = null;
+function showToast(message) {
+  const toast = document.getElementById('toast-el');
+  if (!toast) return;
 
-  function update() {
-    try {
-      const options = { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-      const formatter = new Intl.DateTimeFormat([], options);
-      clockEl.textContent = formatter.format(new Date());
-    } catch (e) {
-      const now = new Date();
-      clockEl.textContent = `${now.getHours()}:${now.getMinutes()}`;
-    }
-  }
+  toast.textContent = message;
+  toast.classList.add('show');
 
-  update();
-  setInterval(update, 1000);
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
 }
