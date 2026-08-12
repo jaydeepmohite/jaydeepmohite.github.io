@@ -199,15 +199,15 @@
                     <div class="highlight-box">
                         <div>
                             <div class="highlight-title">
-                                <i class="fas fa-globe"></i> <span>Featured Production Platform</span>
+                                <i class="fas fa-layer-group"></i> <span>Core Expertise</span>
                             </div>
                             <p class="highlight-desc">
-                                <strong>NetWealth</strong> — Live Progressive Web App (PWA) consolidating Trading 212, Zerodha, JPM, and HDFC portfolios at <strong>netwealth.tech</strong>.
+                                Specializing in zero-downtime AWS EKS platforms, automated IaC with Terraform, and low-latency financial microservices.
                             </p>
                         </div>
-                        <a href="https://netwealth.tech" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="width:100%; justify-content:space-between; font-size:0.8rem;">
-                            <span>Launch Live App</span> <i class="fas fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <button class="btn btn-secondary" style="width:100%; justify-content:space-between; font-size:0.8rem;" onclick="document.querySelector('[data-tab=work]').click();">
+                            <span>Explore Projects</span> <i class="fas fa-arrow-right"></i>
+                        </button>
                     </div>
 
                     <div class="highlight-box">
@@ -239,44 +239,10 @@
                     <button class="filter-btn active" data-filter="all">All Projects</button>
                     <button class="filter-btn" data-filter="cloud">Cloud &amp; DevOps</button>
                     <button class="filter-btn" data-filter="fintech">Low-Latency FinTech</button>
-                    <button class="filter-btn" data-filter="live">Live Platforms</button>
+                    <button class="filter-btn" data-filter="personal">Personal Projects</button>
                 </div>
 
                 <div class="projects-grid">
-                    <!-- Project 1: NetWealth -->
-                    <article class="project-card featured" data-category="live fintech">
-                        <div>
-                            <div class="project-top-row">
-                                <span class="project-badge"><i class="fas fa-globe"></i> Live Production</span>
-                                <span class="project-year">2025 — Present</span>
-                            </div>
-                            <h3 class="project-title">NetWealth Multi-Broker Engine</h3>
-                            <div class="project-subtitle">Live Progressive Web App (PWA)</div>
-                            <p class="project-summary">
-                                Architected and deployed a live Progressive Web App (PWA) consolidating real-time holdings across Trading 212, Zerodha Kite (automated 2FA TOTP), JPM Personal Investing, and HDFC Bank. Features 256-bit AES credential encryption, OCI Vault secrets resolution, and SQLite WAL persistence.
-                            </p>
-                            <div class="project-impact">
-                                <i class="fas fa-circle-check"></i>
-                                <span>Live at <strong>netwealth.tech</strong> &bull; Pluggable multi-broker engine &bull; 100% test coverage</span>
-                            </div>
-                            <div class="tags-row">
-                                <span class="tag-pill highlight">Python</span>
-                                <span class="tag-pill highlight">FastAPI</span>
-                                <span class="tag-pill">Docker</span>
-                                <span class="tag-pill">OCI Vault</span>
-                                <span class="tag-pill">SQLite WAL</span>
-                                <span class="tag-pill">PWA</span>
-                            </div>
-                        </div>
-                        <div class="project-footer">
-                            <a href="https://netwealth.tech" target="_blank" rel="noopener noreferrer" class="project-link">
-                                <span>Launch netwealth.tech</span> <i class="fas fa-arrow-up-right-from-square"></i>
-                            </a>
-                            <a href="https://github.com/jaydeepmohite" target="_blank" rel="noopener noreferrer" class="project-link" style="color:var(--text-muted);">
-                                <span>GitHub</span> <i class="fab fa-github"></i>
-                            </a>
-                        </div>
-                    </article>
 
                     <!-- Project 2: Atlas Migration -->
                     <article class="project-card featured" data-category="cloud">
@@ -374,8 +340,8 @@
                         </div>
                     </article>
 
-                    <!-- Project 5: Digital Planner -->
-                    <article class="project-card" data-category="live">
+                    <!-- Project 4: Digital Planner -->
+                    <article class="project-card" data-category="fintech">
                         <div>
                             <div class="project-top-row">
                                 <span class="project-badge"><i class="fas fa-users"></i> Deutsche Bank</span>
@@ -388,7 +354,7 @@
                             </p>
                             <div class="project-impact">
                                 <i class="fas fa-circle-check"></i>
-                                <span>Empowered 200+ engineers globally &bull; Real-time WebSocket sync</span>
+                                <span>Empowered 200+ engineers globally &amp;bull; Real-time WebSocket sync</span>
                             </div>
                             <div class="tags-row">
                                 <span class="tag-pill highlight">Node.js</span>
@@ -402,6 +368,41 @@
                             <span style="color:var(--text-muted); font-size:0.8rem;">
                                 <i class="fas fa-shield-halved"></i> Deutsche Bank Agile Engineering
                             </span>
+                        </div>
+                    </article>
+
+                    <!-- Project 5: Multi-Broker & Bank Portfolio Aggregator -->
+                    <article class="project-card" data-category="personal fintech">
+                        <div>
+                            <div class="project-top-row">
+                                <span class="project-badge"><i class="fas fa-laptop-code"></i> Personal Project</span>
+                                <span class="project-year">2025 — Present</span>
+                            </div>
+                            <h3 class="project-title">Multi-Broker &amp; Bank Portfolio Aggregator</h3>
+                            <div class="project-subtitle">Full-Stack Progressive Web App (PWA)</div>
+                            <p class="project-summary">
+                                Architected and deployed a full-stack Progressive Web App (PWA) that consolidates real-time holdings, cash balances, and net worth across multiple brokerage accounts and banking institutions into a single unified dashboard. Features automated 2FA TOTP authentication, 256-bit AES credential encryption, secure cloud secrets resolution, and SQLite WAL persistence.
+                            </p>
+                            <div class="project-impact">
+                                <i class="fas fa-circle-check"></i>
+                                <span>Unified net worth dashboard &bull; Modular multi-broker adapters &bull; 100% test coverage</span>
+                            </div>
+                            <div class="tags-row">
+                                <span class="tag-pill highlight">Python</span>
+                                <span class="tag-pill highlight">FastAPI</span>
+                                <span class="tag-pill">Docker</span>
+                                <span class="tag-pill">Cloud Vault</span>
+                                <span class="tag-pill">SQLite WAL</span>
+                                <span class="tag-pill">PWA</span>
+                            </div>
+                        </div>
+                        <div class="project-footer">
+                            <a href="https://netwealth.tech" target="_blank" rel="noopener noreferrer" class="project-link">
+                                <span>netwealth.tech</span> <i class="fas fa-arrow-up-right-from-square"></i>
+                            </a>
+                            <a href="https://github.com/jaydeepmohite" target="_blank" rel="noopener noreferrer" class="project-link" style="color:var(--text-muted);">
+                                <span>GitHub</span> <i class="fab fa-github"></i>
+                            </a>
                         </div>
                     </article>
                 </div>
